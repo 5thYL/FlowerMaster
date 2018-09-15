@@ -74,7 +74,13 @@ namespace FlowerMaster.Helpers
             resultStream.Read(buffer, 0, buffer.Length);
             resultStream.Close();
             outStream.Close();
-            return Encoding.UTF8.GetString(Convert.FromBase64String(Encoding.UTF8.GetString(buffer)));
+            string data = Encoding.UTF8.GetString(buffer);
+            try
+            {
+                data = Encoding.UTF8.GetString(Convert.FromBase64String(data));
+            }
+            catch { }
+            return data;
         }
 
         /// <summary>
@@ -89,17 +95,26 @@ namespace FlowerMaster.Helpers
             pack.requestUrl = s.Request.PathAndQuery;
             pack.rawData = s.Response.BodyAsString;
 
+            while (pack.rawData.Substring(0, 1) == "\n")
+            {
+                pack.rawData = pack.rawData.Substring(1);
+            }
+
             if (s.Request.PathAndQuery.IndexOf("/api/v1/") != -1)
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("/api/") + 8);
                 pack.funcApi = s.Request.PathAndQuery.Substring(s.Request.PathAndQuery.IndexOf("/api/") + 7);
-                if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18) &&
-                    pack.rawData.Substring(0, 1) != "[" && pack.rawData.Substring(0, 1) != "{")
+                if (pack.rawData.Substring(0, 1) != "[" && pack.rawData.Substring(0, 1) != "{")
                 {
-                    pack.rawData = DecryptData(s.Response.Body);
+                    try
+                    {
+                        pack.rawData = DecryptData(s.Response.Body);
+                    }
+                    catch { }
                 }
             }
-            else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18)
+            else if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18 ||
+                    DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChinese || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChineseR18)
                 && s.Request.PathAndQuery.IndexOf("/social/") != -1)
             {
                 pack.funcUrl = s.Request.PathAndQuery.Substring(0, s.Request.PathAndQuery.IndexOf("/social/") + 8);
@@ -148,7 +163,8 @@ namespace FlowerMaster.Helpers
             try
             {
                 //处理日服DMM用户信息-获取用户昵称
-                if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18) && pack.funcUrl.IndexOf("/social/") != -1)
+                if ((DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18 ||
+                    DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChinese || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChineseR18) && pack.funcUrl.IndexOf("/social/") != -1)
                 {
                     if (pack.funcApi == "/rpc")
                     {
@@ -181,11 +197,6 @@ namespace FlowerMaster.Helpers
                         int status = Convert.ToInt16(pack.data["resultCode"].ToString());
                         if (status == 1)
                         {
-                            DataUtil.Game.isOnline = false;
-                        }
-                        if (status == 11)
-                        {
-                            MiscHelper.AddLog("此账号在其他地方登陆，进行刷新。", MiscHelper.LogType.System);
                             DataUtil.Game.isOnline = false;
                         }
                     }

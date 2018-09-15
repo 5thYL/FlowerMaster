@@ -117,7 +117,7 @@ namespace FlowerMaster
             timerNotify = new Timer(new TimerCallback(closeNotify), this, Timeout.Infinite, 10000);
 
             //默认推兔状态
-            PushTimes.Load(-1);
+            PushTimes.Reset();
 
             dgDaliy.ItemsSource = DataUtil.Game.daliyInfo;
             dgMainExp.ItemsSource = DataUtil.Game.expTable;
@@ -382,7 +382,8 @@ namespace FlowerMaster
             {
                 PacketHelper.ProcessPacket(s);
             }
-            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18)
+            else if (DataUtil.Game.gameServer == (int)GameInfo.ServersList.Japan || DataUtil.Game.gameServer == (int)GameInfo.ServersList.JapanR18 ||
+                    DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChinese || DataUtil.Game.gameServer == (int)GameInfo.ServersList.TradChineseR18)
             {
                 if (s.Request.PathAndQuery.IndexOf("/social/rpc") != -1)
                 {
@@ -693,7 +694,7 @@ namespace FlowerMaster
                 Refresh();
             }
         }
-
+        
         /// <summary>
         /// 独立出的刷新游戏代码
         /// </summary>
@@ -1075,7 +1076,7 @@ namespace FlowerMaster
         /// <param name="e"></param>
         private void btnPush_Click(object sender, RoutedEventArgs e)
         {
-            if (PushTimes.Value() >= 0)
+            if (PushTimes.Value() > 0)
             {
                 MessageBox.Show("请点击下面的按钮暂停", "推兔中", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
@@ -1109,7 +1110,7 @@ namespace FlowerMaster
             while (PushThread.IsAlive == true)
             {
                 await Task.Delay(1000);
-                if (PushTimes.Value() <= 0)
+                if (PushTimes.Value() == 0)
                 {
                     PushThread.Abort();
                 }
