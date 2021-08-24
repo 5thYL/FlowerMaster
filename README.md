@@ -1,7 +1,7 @@
 # 团长助手重开
 
-最近刷经验刷烦了...决定重开一下
-这里参照的是https://github.com/dghkd/FlowerMaster 的CEF嵌入, 本人技术力不够只能这样处理了
+最近刷经验刷烦了...决定重开一下  
+这里参照的是https://github.com/dghkd/FlowerMaster 的CEF嵌入, 本人技术力不够只能这样处理了  
 就这样, 希望能搞出点啥东西吧
 
 # 自动推图模块制作[中]：
