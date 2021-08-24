@@ -1,3 +1,9 @@
+# 团长助手重开
+
+最近刷经验刷烦了...决定重开一下
+这里参照的是https://github.com/dghkd/FlowerMaster 的CEF嵌入, 本人技术力不够只能这样处理了
+就这样, 希望能搞出点啥东西吧
+
 # 自动推图模块制作：
  
  在原团长助理的基础上添加了自动推图的模块，并已经达成了长时间自动推图与探索的效果。
@@ -21,11 +27,6 @@
 
 团长助理（FlowerMaster）是DMM游戏《美少女花骑士》适配的浏览器应用程序。
 在载入游戏的同时，对部分游戏数据情报做出显示，并提供日志记录、提醒设置等一系列辅助功能。
-
-### 下载地址
-
-* [Github](https://github.com/lprensoft/FlowerMaster/releases)
-* [Baidu](http://pan.baidu.com/s/1jIpqEea)
 
 ### 主要功能
 
