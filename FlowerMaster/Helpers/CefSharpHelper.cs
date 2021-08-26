@@ -60,6 +60,10 @@ namespace FlowerMaster.Helpers
 
             cefSettings.CefCommandLineArgs.Add("proxy-server", GetLocalProxySettingString());
             CefSharpSettings.SubprocessExitIfParentProcessClosed = true;
+            //Makes the Winform version of CEF also render to bitmap, 
+            cefSettings.CefCommandLineArgs.Add("in-process-gpu", "1");
+            cefSettings.CefCommandLineArgs.Add("enable-gpu", "1");
+            cefSettings.CefCommandLineArgs.Add("enable-begin-frame-scheduling", "1");
 
             Cef.EnableHighDPISupport();
             Cef.Initialize(cefSettings);

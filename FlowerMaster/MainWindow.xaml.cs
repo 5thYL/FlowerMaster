@@ -848,6 +848,14 @@ namespace FlowerMaster
 
         public void btnAuto_Click(object sender, RoutedEventArgs e)
         {
+            int x = autoClickX, y = autoClickY;
+            if (autoGoLastConf > 0)
+            {
+                x = 765;
+                y = 475;
+                autoGoLastConf--;
+            }
+
             if (!DataUtil.Game.isOnline) return;
             if (webHandle == IntPtr.Zero)
             {
@@ -869,6 +877,7 @@ namespace FlowerMaster
             {
                 MiscHelper.SetAutoGo(true);
             }
+
         }
 
         private void cbGameServer_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -980,5 +989,20 @@ namespace FlowerMaster
             grid1.Children.Add(WinFormHost);
             this.Visibility = Visibility.Visible;
         }
+
+
+        /// <summary>
+        /// 打开游戏坐标窗口
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCordWindow_Click(object sender, RoutedEventArgs e)
+        {
+            CordWindow cords = new CordWindow(Process.GetCurrentProcess().MainWindowHandle);
+            cords.Show();
+        }
+
     }
+
+
 }
