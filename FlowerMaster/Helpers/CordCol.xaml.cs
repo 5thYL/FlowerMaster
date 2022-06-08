@@ -91,10 +91,10 @@ namespace FlowerMaster
         /// Credits to https://stackoverflow.com/questions/17378973/get-window-hwnd-if-owner-hwnd-class-name-and-size-of-the-window-are-known
         /// </summary>
         /// <param name="Top">顶层Handle</param>
+        /// <param name="className">Optional - class name of the desired handle</param>
         /// <returns></returns>
-        public static IntPtr GetWebHandle(IntPtr Top)
+        public static IntPtr GetWebHandle(IntPtr Top, string className = "Chrome_RenderWidgetHostHWND")
         {
-            string className = "Chrome_RenderWidgetHostHWND";
             if (string.IsNullOrWhiteSpace(className))
             {
                 throw new ArgumentOutOfRangeException("className", className, "className can't be null or blank.");
@@ -124,10 +124,10 @@ namespace FlowerMaster
             private WindowsByClassFinder(string className, IntPtr Top)
             {
                 _className = className;
-                EnumChildWindows(Top, callback, IntPtr.Zero);
+                EnumChildWindows(Top, Callback, IntPtr.Zero);
             }
 
-            private bool callback(IntPtr hWnd, IntPtr lparam)
+            private bool Callback(IntPtr hWnd, IntPtr lparam)
             {
                 if (GetClassName(hWnd, _apiResult, _apiResult.Capacity) != 0)
                 {
@@ -172,8 +172,8 @@ namespace FlowerMaster
             System.Drawing.Point Pointy = GetMousePosition();
             GetWindowRect(WebHandle, out RECT lprect);
             
-            Pointy.X = Pointy.X - lprect.Left;
-            Pointy.Y = Pointy.Y - lprect.Top;
+            Pointy.X -= lprect.Left;
+            Pointy.Y -= lprect.Top;
             
             System.Drawing.Color Color = GetPixelColor(WebHandle, Pointy.X - lprect.Left, Pointy.Y - lprect.Top);
             

@@ -78,6 +78,7 @@ namespace FlowerMaster.Helpers
             Sell, //贩卖
             Mailbox, //礼品箱
             Levelup, //升级
+            GrindDebug = 98, //爱黑百合调试
             Debug = 99, //调试
         }
 
@@ -127,9 +128,29 @@ namespace FlowerMaster.Helpers
                     typeColor = Colors.White;
                     break;
             }
+            //如果是推兔调试信息的话, 没有勾选对应选项直接返回
+            if (type == LogType.GrindDebug && DataUtil.Config.sysConfig.grindDebugMode == false) return;
             if (!main.Dispatcher.CheckAccess())
             {
                 main.Dispatcher.Invoke(new Action(() =>
+                {
+                    if (type != LogType.GrindDebug || DataUtil.Config.sysConfig.grindDebugMode == true) //限定只在推兔调试模式下输出该类日志
+                    {
+                        Paragraph p = new Paragraph();
+                        Run timeText = new Run() { Text = DateTime.Now.ToString("HH:mm:ss") + " ", Foreground = new SolidColorBrush(Colors.Gray) };
+                        Run logText = new Run() { Text = log, Foreground = new SolidColorBrush(typeColor) };
+                        p.Inlines.Add(timeText);
+                        p.Inlines.Add(logText);
+                        p.LineHeight = 3;
+                        main.gameLog.Document.Blocks.Add(p);
+                        main.gameLog.ScrollToEnd();
+                        if (type != LogType.System && type != LogType.Debug) main.stLog.Text = log;
+                    }
+                }));
+            }
+            else
+            {
+                if (type != LogType.GrindDebug || DataUtil.Config.sysConfig.grindDebugMode == true) //限定只在推兔调试模式下输出该类日志
                 {
                     Paragraph p = new Paragraph();
                     Run timeText = new Run() { Text = DateTime.Now.ToString("HH:mm:ss") + " ", Foreground = new SolidColorBrush(Colors.Gray) };
@@ -140,19 +161,7 @@ namespace FlowerMaster.Helpers
                     main.gameLog.Document.Blocks.Add(p);
                     main.gameLog.ScrollToEnd();
                     if (type != LogType.System && type != LogType.Debug) main.stLog.Text = log;
-                }));
-            }
-            else
-            {
-                Paragraph p = new Paragraph();
-                Run timeText = new Run() { Text = DateTime.Now.ToString("HH:mm:ss") + " ", Foreground = new SolidColorBrush(Colors.Gray) };
-                Run logText = new Run() { Text = log, Foreground = new SolidColorBrush(typeColor) };
-                p.Inlines.Add(timeText);
-                p.Inlines.Add(logText);
-                p.LineHeight = 3;
-                main.gameLog.Document.Blocks.Add(p);
-                main.gameLog.ScrollToEnd();
-                if (type != LogType.System && type != LogType.Debug) main.stLog.Text = log;
+                }
             }
             if (type != LogType.System && type != LogType.Debug) LogsHelper.LogGame(log);
         }

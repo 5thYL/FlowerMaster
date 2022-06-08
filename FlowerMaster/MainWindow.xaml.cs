@@ -36,6 +36,8 @@ namespace FlowerMaster
         public int autoClickX = 0; //自動推圖點擊座標X
         public int autoClickY = 0; //自動推圖點擊座標Y
 
+        private readonly Counter GrindTimes = Counter.Instance; //自动推兔2.0状态
+
         private IntPtr webHandle = IntPtr.Zero;
         private GameFrameVM _gameFrameVM;
 
@@ -271,6 +273,33 @@ namespace FlowerMaster
             {
                 tbCssStyle.Text = DataUtil.Config.sysConfig.userCSS;
             }
+
+            //自动推兔2.0设置
+            cbAutoType.SelectedIndex = DataUtil.Config.sysConfig.autoType;
+            cbGrindType.SelectedIndex = DataUtil.Config.sysConfig.grindType;
+            cbSpecTarget.SelectedIndex = DataUtil.Config.sysConfig.specTarget;
+            tbGrindTimes.Text = DataUtil.Config.sysConfig.grindTimes.ToString();
+
+            chkPotionTrue.IsChecked = DataUtil.Config.sysConfig.potionTrue;
+            chkStoneTrue.IsChecked = DataUtil.Config.sysConfig.stoneTrue;
+
+            chkRaidOther.IsChecked = DataUtil.Config.sysConfig.raidOther;
+            chkRaidSelf.IsChecked = DataUtil.Config.sysConfig.raidSelf;
+            chkSpecialTrue.IsChecked = DataUtil.Config.sysConfig.specialTrue;
+
+            tbDelayTime.Text = DataUtil.Config.sysConfig.delayTime.ToString();
+            tbRerollUntilRainbow.Text = DataUtil.Config.sysConfig.rerollUntilRainbowCount.ToString();
+
+            //chkSellTrue.IsChecked = DataUtil.Config.sysConfig.sellTrue;
+            chkExploreTrue.IsChecked = DataUtil.Config.sysConfig.exploreTrue;
+            chkGardenTrue.IsChecked = DataUtil.Config.sysConfig.gardenTrue;
+            chkActionPrep.IsChecked = DataUtil.Config.sysConfig.actionPrep;
+
+            chkGameRestart.IsChecked = DataUtil.Config.sysConfig.gameRestart;
+            chkForcedRestart.IsChecked = DataUtil.Config.sysConfig.forcedRestart;
+
+            chkSpecialBlock.IsChecked = DataUtil.Config.sysConfig.specialBlock;
+            chkGrindDebugMode.IsChecked = DataUtil.Config.sysConfig.grindDebugMode;
         }
 
         /// <summary>
@@ -569,7 +598,35 @@ namespace FlowerMaster
             DataUtil.Config.sysConfig.hotKeyShift = chkHotKeyShift.IsChecked.HasValue ? (bool)chkHotKeyShift.IsChecked : false;
             DataUtil.Config.sysConfig.hotKey = tbHotKey.Text[0];
 
+
             DataUtil.Config.sysConfig.capFormat = (SysConfig.ScreenShotFormat)cbCapFormat.SelectedIndex;
+
+            //自动推兔设置
+            DataUtil.Config.sysConfig.autoType = cbAutoType.SelectedIndex;
+            DataUtil.Config.sysConfig.grindType = cbGrindType.SelectedIndex;
+            DataUtil.Config.sysConfig.specTarget = cbSpecTarget.SelectedIndex;
+            DataUtil.Config.sysConfig.grindTimes = int.Parse(tbGrindTimes.Text);
+
+            DataUtil.Config.sysConfig.potionTrue = chkPotionTrue.IsChecked.HasValue ? (bool)chkPotionTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.stoneTrue = chkStoneTrue.IsChecked.HasValue ? (bool)chkStoneTrue.IsChecked : false;
+
+            DataUtil.Config.sysConfig.raidOther = chkRaidOther.IsChecked.HasValue ? (bool)chkRaidOther.IsChecked : false;
+            DataUtil.Config.sysConfig.raidSelf = chkRaidSelf.IsChecked.HasValue ? (bool)chkRaidSelf.IsChecked : false;
+            DataUtil.Config.sysConfig.specialTrue = chkSpecialTrue.IsChecked.HasValue ? (bool)chkSpecialTrue.IsChecked : false;
+
+            DataUtil.Config.sysConfig.delayTime = int.Parse(tbDelayTime.Text);
+            DataUtil.Config.sysConfig.rerollUntilRainbowCount = int.Parse(tbRerollUntilRainbow.Text);
+
+            //DataUtil.Config.sysConfig.sellTrue = chkSellTrue.IsChecked.HasValue ? (bool)chkSellTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.exploreTrue = chkExploreTrue.IsChecked.HasValue ? (bool)chkExploreTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.gardenTrue = chkGardenTrue.IsChecked.HasValue ? (bool)chkGardenTrue.IsChecked : false;
+            DataUtil.Config.sysConfig.actionPrep = chkActionPrep.IsChecked.HasValue ? (bool)chkActionPrep.IsChecked : false;
+
+            DataUtil.Config.sysConfig.gameRestart = chkGameRestart.IsChecked.HasValue ? (bool)chkGameRestart.IsChecked : false;
+            DataUtil.Config.sysConfig.forcedRestart = chkForcedRestart.IsChecked.HasValue ? (bool)chkForcedRestart.IsChecked : false;
+
+            DataUtil.Config.sysConfig.specialBlock = chkSpecialBlock.IsChecked.HasValue ? (bool)chkSpecialBlock.IsChecked : false;
+            DataUtil.Config.sysConfig.grindDebugMode = chkGrindDebugMode.IsChecked.HasValue ? (bool)chkGrindDebugMode.IsChecked : false;
 
             if (cbGameServer.SelectedIndex == (int)GameInfo.ServersList.American || cbGameServer.SelectedIndex == (int)GameInfo.ServersList.AmericanR18)
             {
@@ -671,14 +728,29 @@ namespace FlowerMaster
         {
             if (MessageBox.Show("确实要重新载入页面吗？", "操作确认", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
-                styleSheetApplied = false;
-                loginSubmitted = false;
-                newsHadShown = false;
-                DataUtil.Game.isOnline = false;
-                DataUtil.Game.canAuto = false;
-                mainWeb.Load(DataUtil.Game.gameUrl);
+                //MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
+                //styleSheetApplied = false;
+                //loginSubmitted = false;
+                //newsHadShown = false;
+                //DataUtil.Game.isOnline = false;
+                //DataUtil.Game.canAuto = false;
+                //mainWeb.Load(DataUtil.Game.gameUrl);
+                Refresh();
             }
+        }
+
+        /// <summary>
+        /// 独立出的刷新游戏代码
+        /// </summary>
+        private void Refresh()
+        {
+            MiscHelper.AddLog("正在重新载入游戏页面...", MiscHelper.LogType.System);
+            styleSheetApplied = false;
+            loginSubmitted = false;
+            newsHadShown = false;
+            DataUtil.Game.isOnline = false;
+            DataUtil.Game.canAuto = false;
+            mainWeb.Load(DataUtil.Game.gameUrl);
         }
 
         private void MetroWindow_Loaded(object sender, RoutedEventArgs e)
@@ -848,6 +920,7 @@ namespace FlowerMaster
 
         public void btnAuto_Click(object sender, RoutedEventArgs e)
         {
+            /*
             int x = autoClickX, y = autoClickY;
             if (autoGoLastConf > 0)
             {
@@ -877,7 +950,13 @@ namespace FlowerMaster
             {
                 MiscHelper.SetAutoGo(true);
             }
+            */
 
+            Clicker Cli = Clicker.Instance;
+            Cli.Load(CordCol.GetWebHandle(mainWeb.Handle, "Chrome_WidgetWin_0"));
+            Cli.Click(1020, 600);
+            Cli.Click(1020, 600);
+            Cli.Click(1020, 600);
         }
 
         private void cbGameServer_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -1002,6 +1081,118 @@ namespace FlowerMaster
             cords.Show();
         }
 
+        /// <summary>
+        /// 自动推兔按钮事件
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnGrind_Click(object sender, RoutedEventArgs e)
+        {
+            if (GrindTimes.Value() > 0)
+            {
+                MessageBox.Show("请点击下面的按钮暂停", "推兔中", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
+            //如果状态为0，启动推兔功能
+            else
+            {
+                MessageBoxResult type = MessageBox.Show("点击OK开始自动推兔\r\n请在游戏主页开启此功能\r\n双击下面的X暂停，使用愉快", "脚本开始", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (type == MessageBoxResult.OK)
+                {
+                    GrindTimes.Load(DataUtil.Config.sysConfig.grindTimes);
+                    AutoGrind();
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// 启动自动推兔
+        /// </summary>
+        private async void AutoGrind()
+        {
+            MiscHelper.AddLog("开始推兔!", MiscHelper.LogType.GrindDebug);
+            Nodes Node = new Nodes();
+
+            Node.ScInitialize(CordCol.GetWebHandle(mainWeb.Handle), CordCol.GetWebHandle(mainWeb.Handle, "Chrome_WidgetWin_0"));
+
+            Thread PushThread = new Thread(Node.Start);
+            PushThread.Start();
+            while (PushThread.IsAlive == true)
+            {
+                await Task.Delay(1000);
+                if (GrindTimes.Value() == 0)
+                {
+                    PushThread.Abort();
+                }
+                if ((DataUtil.Game.isOnline == false &&
+                     DataUtil.Config.sysConfig.gameRestart == true)
+                     ||
+                    (DataUtil.Config.sysConfig.forcedRestart == true &&
+                     DateTime.UtcNow.ToString("HH:mm") == "19:00" &&
+                     DateTime.UtcNow.Second > 20 &&
+                     DateTime.UtcNow.Second < 23))
+                {
+                    PushThread.Abort();
+                    Refresh();
+                    Helpers.Color Col = Helpers.Color.Instance;
+                    Clicker Cli = Clicker.Instance;
+                    while (Col.Check(437, 177, 211, 209, 205) == false)
+                    {
+                        Cli.Click(677, 633);
+                        Cli.Click(800, 150);
+                        Cli.Click(800, 200);
+                        await Task.Delay(1000);
+                    }
+                    AutoGrind();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 自动推兔停止按钮
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnGrind_Set(object sender, RoutedEventArgs e)
+        {
+            if (GrindTimes.Value() > 0)
+            {
+                GrindTimes.Reset();
+                MessageBox.Show("暂停成功，推完这把就结束。", "暂停成功", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+            }
+        }
+
+        /// <summary>
+        /// 检测推图类型并且决定是否显示特命目标
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void cbGrindType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbGrindType.SelectedIndex == 3)
+            {
+                cbSpecTarget.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                cbSpecTarget.Visibility = Visibility.Hidden;
+            }
+        }
+
+        private void cbAutoType_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cbAutoType.SelectedIndex == 2)
+            {
+                lbRerollUntilRainbow.Visibility = Visibility.Visible;
+                tbRerollUntilRainbow.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                lbRerollUntilRainbow.Visibility = Visibility.Hidden;
+                tbRerollUntilRainbow.Visibility = Visibility.Hidden;
+            }
+        }
     }
 
 

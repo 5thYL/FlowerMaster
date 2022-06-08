@@ -205,6 +205,93 @@ namespace FlowerMaster.Models
             /// 用户抽取美服Flash样式
             /// </summary>
             public string userCSSAmerican;
+
+            //自动推兔系列设置
+            /// <summary>
+            /// 自动模式
+            /// </summary>
+            public int autoType;
+            /// <summary>
+            /// 推兔模式
+            /// </summary>
+            public int grindType;
+            /// <summary>
+            /// 活动特命目标
+            /// </summary>
+            public int specTarget;
+            /// <summary>
+            /// 推兔次数
+            /// </summary>
+            public int grindTimes;
+
+            /// <summary>
+            /// 是否喝药水
+            /// </summary>
+            public bool potionTrue;
+            /// <summary>
+            /// 是否吃石头
+            /// </summary>
+            public bool stoneTrue;
+
+            /// <summary>
+            /// 是否打别人的Boss
+            /// </summary>
+            public bool raidOther;
+            /// <summary>
+            /// 是否打自己的Boss
+            /// </summary>
+            public bool raidSelf;
+            /// <summary>
+            /// 是否推特命
+            /// </summary>
+            public bool specialTrue;
+
+            /// <summary>
+            /// 设置延迟
+            /// </summary>
+            public int delayTime;
+
+            /// <summary>
+            /// 是否自动出售
+            /// </summary>
+            public bool sellTrue;
+            /// <summary>
+            /// 是否自动探索
+            /// </summary>
+            public bool exploreTrue;
+            /// <summary>
+            /// 是否自动抓虫
+            /// </summary>
+            public bool gardenTrue;
+            /// <summary>
+            /// 是否提前恢复体力
+            /// </summary>
+            public bool actionPrep;
+
+            /// <summary>
+            /// 是否自动重启游戏
+            /// </summary>
+            public bool gameRestart;
+
+            /// <summary>
+            /// 是否每日四点强制重启
+            /// </summary>
+            public bool forcedRestart;
+
+            /// <summary>
+            /// 是否有导致某些推图按钮下推的活动图标,增加y坐标84
+            /// </summary>
+            public bool specialBlock;
+
+            /// <summary>
+            /// 是否开启推兔调试模式
+            /// </summary>
+            public bool grindDebugMode;
+
+            /// <summary>
+            /// Reroll until getting this number of rainbows
+            /// </summary>
+            public int rerollUntilRainbowCount;
         }
 
         /// <summary>
@@ -369,6 +456,27 @@ namespace FlowerMaster.Models
 
             sysConfig.userCSS = DefaultCSSJapan;
             sysConfig.userCSSAmerican = DefaultCSSAmerican;
+
+            //自动推兔初始化
+            sysConfig.autoType = 0;
+            sysConfig.grindType = 2;
+            sysConfig.specTarget = 1;
+            sysConfig.grindTimes = 9999;
+            sysConfig.potionTrue = true;
+            sysConfig.stoneTrue = false;
+            sysConfig.raidOther = true;
+            sysConfig.raidSelf = true;
+            sysConfig.specialTrue = false;
+            sysConfig.delayTime = 250;
+            sysConfig.sellTrue = true;
+            sysConfig.exploreTrue = true;
+            sysConfig.gardenTrue = true;
+            sysConfig.actionPrep = false;
+            sysConfig.gameRestart = false;
+            sysConfig.forcedRestart = false;
+            sysConfig.specialBlock = false;
+            sysConfig.grindDebugMode = false;
+            sysConfig.rerollUntilRainbowCount = 4;
         }
 
         /// <summary>
@@ -506,6 +614,32 @@ namespace FlowerMaster.Models
                 {
                     sysConfig.userCSSAmerican = xe.GetAttribute("CssStyle") != "" ? xe.GetAttribute("CssStyle") : DefaultCSSAmerican;
                 }
+
+                //自动推兔
+                xn = xmlDoc.SelectSingleNode("/Config/AutoGrind");
+                xe = (XmlElement)xn;
+                if (xe != null)
+                {
+                    sysConfig.autoType = xe.GetAttribute("AutoType") != "" ? int.Parse(xe.GetAttribute("AutoType")) : sysConfig.autoType;
+                    sysConfig.grindType = xe.GetAttribute("GrindType") != "" ? int.Parse(xe.GetAttribute("GrindType")) : sysConfig.grindType;
+                    sysConfig.specTarget = xe.GetAttribute("specTarget") != "" ? int.Parse(xe.GetAttribute("specTarget")) : sysConfig.specTarget;
+                    sysConfig.grindTimes = xe.GetAttribute("GrindTimes") != "" ? int.Parse(xe.GetAttribute("GrindTimes")) : sysConfig.grindTimes;
+                    sysConfig.potionTrue = xe.GetAttribute("PotionTrue") != "" ? bool.Parse(xe.GetAttribute("PotionTrue")) : sysConfig.potionTrue;
+                    sysConfig.stoneTrue = xe.GetAttribute("StoneTrue") != "" ? bool.Parse(xe.GetAttribute("StoneTrue")) : sysConfig.stoneTrue;
+                    sysConfig.raidOther = xe.GetAttribute("RaidOther") != "" ? bool.Parse(xe.GetAttribute("RaidOther")) : sysConfig.raidOther;
+                    sysConfig.raidSelf = xe.GetAttribute("RaidSelf") != "" ? bool.Parse(xe.GetAttribute("RaidSelf")) : sysConfig.raidSelf;
+                    sysConfig.specialTrue = xe.GetAttribute("SpecialTrue") != "" ? bool.Parse(xe.GetAttribute("SpecialTrue")) : sysConfig.specialTrue;
+                    sysConfig.delayTime = xe.GetAttribute("DelayTime") != "" ? int.Parse(xe.GetAttribute("DelayTime")) : sysConfig.delayTime;
+                    sysConfig.sellTrue = xe.GetAttribute("SellTrue") != "" ? bool.Parse(xe.GetAttribute("SellTrue")) : sysConfig.sellTrue;
+                    sysConfig.exploreTrue = xe.GetAttribute("ExploreTrue") != "" ? bool.Parse(xe.GetAttribute("ExploreTrue")) : sysConfig.exploreTrue;
+                    sysConfig.gardenTrue = xe.GetAttribute("GardenTrue") != "" ? bool.Parse(xe.GetAttribute("GardenTrue")) : sysConfig.gardenTrue;
+                    sysConfig.actionPrep = xe.GetAttribute("ActionPrep") != "" ? bool.Parse(xe.GetAttribute("ActionPrep")) : sysConfig.actionPrep;
+                    sysConfig.gameRestart = xe.GetAttribute("GameRestart") != "" ? bool.Parse(xe.GetAttribute("GameRestart")) : sysConfig.gameRestart;
+                    sysConfig.forcedRestart = xe.GetAttribute("ForcedRestart") != "" ? bool.Parse(xe.GetAttribute("ForcedRestart")) : sysConfig.forcedRestart;
+                    sysConfig.specialBlock = xe.GetAttribute("SpecialBlock") != "" ? bool.Parse(xe.GetAttribute("SpecialBlock")) : sysConfig.specialBlock;
+                    sysConfig.grindDebugMode = xe.GetAttribute("GrindDebugMode") != "" ? bool.Parse(xe.GetAttribute("GrindDebugMode")) : sysConfig.grindDebugMode;
+                    sysConfig.rerollUntilRainbowCount = xe.GetAttribute("RerollUntilRainbowCount") != "" ? int.Parse(xe.GetAttribute("RerollUntilRainbowCount")) : sysConfig.rerollUntilRainbowCount;
+                }
             }
             catch { }
         }
@@ -589,6 +723,31 @@ namespace FlowerMaster.Models
                     XmlElement cssA = xmlDoc.CreateElement("UserCssStyleAmerican");
                     css.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
                     rootNode.AppendChild(cssA);
+
+
+                    //自动推兔
+                    XmlElement autoGrind = xmlDoc.CreateElement("AutoGrind");
+                    autoGrind.SetAttribute("AutoType", sysConfig.autoType.ToString());
+                    autoGrind.SetAttribute("GrindType", sysConfig.grindType.ToString());
+                    autoGrind.SetAttribute("specTarget", sysConfig.specTarget.ToString());
+                    autoGrind.SetAttribute("GrindTimes", sysConfig.grindTimes.ToString());
+                    autoGrind.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
+                    autoGrind.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
+                    autoGrind.SetAttribute("RaidOther", sysConfig.raidOther.ToString());
+                    autoGrind.SetAttribute("RaidSelf", sysConfig.raidSelf.ToString());
+                    autoGrind.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
+                    autoGrind.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
+                    autoGrind.SetAttribute("SellTrue", sysConfig.sellTrue.ToString());
+                    autoGrind.SetAttribute("ExploreTrue", sysConfig.exploreTrue.ToString());
+                    autoGrind.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
+                    autoGrind.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
+                    autoGrind.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
+                    autoGrind.SetAttribute("ForcedRestart", sysConfig.forcedRestart.ToString());
+                    autoGrind.SetAttribute("SpecialBlock", sysConfig.specialBlock.ToString());
+                    autoGrind.SetAttribute("GrindDebugMode", sysConfig.grindDebugMode.ToString());
+                    autoGrind.SetAttribute("RerollUntilRainbowCount", sysConfig.rerollUntilRainbowCount.ToString());
+                    rootNode.AppendChild(autoGrind);
+
 
                     xmlDoc.Save("config.xml");
                 }
@@ -708,6 +867,34 @@ namespace FlowerMaster.Models
                         rootNode.AppendChild(xe);
                     }
                     xe.SetAttribute("CssStyle", sysConfig.userCSSAmerican);
+
+                    //自动推兔
+                    xn = xmlDoc.SelectSingleNode("/Config/AutoGrind");
+                    xe = (XmlElement)xn;
+                    if (xe == null)
+                    {
+                        xe = xmlDoc.CreateElement("AutoGrind");
+                        rootNode.AppendChild(xe);
+                    }
+                    xe.SetAttribute("AutoType", sysConfig.autoType.ToString());
+                    xe.SetAttribute("GrindType", sysConfig.grindType.ToString());
+                    xe.SetAttribute("specTarget", sysConfig.specTarget.ToString());
+                    xe.SetAttribute("GrindTimes", sysConfig.grindTimes.ToString());
+                    xe.SetAttribute("PotionTrue", sysConfig.potionTrue.ToString());
+                    xe.SetAttribute("StoneTrue", sysConfig.stoneTrue.ToString());
+                    xe.SetAttribute("RaidOther", sysConfig.raidOther.ToString());
+                    xe.SetAttribute("RaidSelf", sysConfig.raidSelf.ToString());
+                    xe.SetAttribute("SpecialTrue", sysConfig.specialTrue.ToString());
+                    xe.SetAttribute("DelayTime", sysConfig.delayTime.ToString());
+                    xe.SetAttribute("SellTrue", sysConfig.sellTrue.ToString());
+                    xe.SetAttribute("ExploreTrue", sysConfig.exploreTrue.ToString());
+                    xe.SetAttribute("GardenTrue", sysConfig.gardenTrue.ToString());
+                    xe.SetAttribute("ActionPrep", sysConfig.actionPrep.ToString());
+                    xe.SetAttribute("GameRestart", sysConfig.gameRestart.ToString());
+                    xe.SetAttribute("ForcedRestart", sysConfig.forcedRestart.ToString());
+                    xe.SetAttribute("SpecialBlock", sysConfig.specialBlock.ToString());
+                    xe.SetAttribute("GrindDebugMode", sysConfig.grindDebugMode.ToString());
+                    xe.SetAttribute("RerollUntilRainbowCount", sysConfig.rerollUntilRainbowCount.ToString());
 
                     xmlDoc.Save("config.xml");
                 }
