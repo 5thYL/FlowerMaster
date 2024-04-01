@@ -51,6 +51,7 @@ namespace FlowerMaster.Helpers
         public void Start()
         {
             Random rnd = new Random();
+            delay = rnd.Next(DataUtil.Config.sysConfig.delayTime, DataUtil.Config.sysConfig.delayTime * 2);
 
             //Grind!
             while (GrindTimes.Value() > 0 &&
@@ -169,6 +170,27 @@ namespace FlowerMaster.Helpers
                     ScReroll();
                 }
             }
+
+            //School Event Clicker
+            while (GrindTimes.Value() > 0 &&
+                   DataUtil.Config.sysConfig.autoType == 3)
+            {
+                MiscHelper.AddLog("Starting school event clicker, checking if in the school event start screen or challenges screen", MiscHelper.LogType.GrindDebug);
+                while (Col.Check(410, 68, 103, 163, 251) == false && Col.Check(260, 80, 131, 129, 159) == false)
+                {
+                    MiscHelper.AddLog("Not in the school event screen, please go to the school event start screen or challenges screen. Sleeping for 50 times delay value", MiscHelper.LogType.GrindDebug);
+                    Thread.Sleep(50 * delay);
+                }
+
+
+                Thread.Sleep(delay);
+                while (Col.Check(410, 68, 103, 163, 251) == true || Col.Check(260, 80, 131, 129, 159) == true)
+                {
+                    MiscHelper.AddLog("In the school event start screen or challenges screen, starting to click", MiscHelper.LogType.GrindDebug);
+                    SCSchoolEvent();
+                }
+            }
+
 
             return;
         }
@@ -819,11 +841,14 @@ namespace FlowerMaster.Helpers
 
         }
 
+        /// <summary>
+        /// Rerolls the gacha
+        /// </summary>
         private void ScReroll()
         {
             MiscHelper.AddLog("Clicking Reroll button", MiscHelper.LogType.GrindDebug);
             Cli.Click(315, 500);
-            while(Col.Check(740, 500, 69, 135, 192) == true)
+            while (Col.Check(740, 500, 69, 135, 192) == true)
             {
                 MiscHelper.AddLog("Waiting until roll happened", MiscHelper.LogType.GrindDebug);
                 Thread.Sleep(delay);
@@ -853,13 +878,56 @@ namespace FlowerMaster.Helpers
                     RainbowCount += 1;
                 }
             }
-            if(RainbowCount >= DataUtil.Config.sysConfig.rerollUntilRainbowCount)
+            if (RainbowCount >= DataUtil.Config.sysConfig.rerollUntilRainbowCount)
             {
                 MiscHelper.AddLog($"Rerolled for enough rainbows - {RainbowCount}, sleeping for 5 seconds and stopping script", MiscHelper.LogType.GrindDebug);
                 GrindTimes.Reset();
                 Thread.Sleep(5000);
             }
             else MiscHelper.AddLog($"Didn't find enough rainbows, only {RainbowCount}, keep rerolling", MiscHelper.LogType.GrindDebug);
+        }
+
+
+        /// <summary>
+        /// Repeatedly clicks all the options in the school event, repeats infinitely
+        /// X spacing is around 213
+        /// Y spacing is around 139
+        /// </summary>
+        private void SCSchoolEvent()
+        {
+            MiscHelper.AddLog("Repeatedly clicking every options until the end window pops up", MiscHelper.LogType.GrindDebug);
+            while(Col.Check(200, 480, 218, 192, 146) == false)
+            {
+                Cli.Click(430, 260);
+                Thread.Sleep(delay);
+
+                Cli.Click(643, 260);
+                Thread.Sleep(delay);
+
+                Cli.Click(856, 260);
+                Thread.Sleep(delay);
+
+                Cli.Click(430, 399);
+                Thread.Sleep(delay);
+
+                Cli.Click(643, 399);
+                Thread.Sleep(delay);
+
+                Cli.Click(856, 399);
+                Thread.Sleep(delay);
+
+                Cli.Click(430, 538);
+                Thread.Sleep(delay);
+
+                Cli.Click(643, 538);
+                Thread.Sleep(delay);
+
+                Cli.Click(856, 538);
+                Thread.Sleep(delay);
+            }
+
+            MiscHelper.AddLog("End window has appeared, restarting", MiscHelper.LogType.GrindDebug);
+            Cli.Click(420, 490);
         }
 
         /* Place Holder

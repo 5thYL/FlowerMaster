@@ -30,6 +30,7 @@ namespace FlowerMaster.Helpers
         public void Load(IntPtr Handle)
         {
             WebHandle = Handle;
+            //WebHandle = CordCol.GetWebHandle(Handle);
         }
 
         /// <summary>
@@ -60,6 +61,7 @@ namespace FlowerMaster.Helpers
             
             else
             {
+                MiscHelper.AddLog(WebHandle + "X = " + X + ", Y = " + Y + ", Red = " + color.R + ", Blue = " + color.B + ", Green = " + color.G + ". Hence false.", MiscHelper.LogType.GrindDebug);
                 return false;
             }
         }

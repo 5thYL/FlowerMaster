@@ -1114,7 +1114,7 @@ namespace FlowerMaster
             MiscHelper.AddLog("开始推兔!", MiscHelper.LogType.GrindDebug);
             Nodes Node = new Nodes();
 
-            Node.ScInitialize(CordCol.GetWebHandle(mainWeb.Handle), CordCol.GetWebHandle(mainWeb.Handle, "Chrome_WidgetWin_0"));
+            Node.ScInitialize(CordCol.GetWebHandle(Process.GetCurrentProcess().MainWindowHandle), CordCol.GetWebHandle(mainWeb.Handle, "Chrome_WidgetWin_0"));
 
             Thread PushThread = new Thread(Node.Start);
             PushThread.Start();

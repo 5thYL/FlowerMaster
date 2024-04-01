@@ -918,6 +918,7 @@
                             <ComboBoxItem Content="推兔 - 别用"/>
                             <ComboBoxItem Content="主页待机 - 别用"/>
                             <ComboBoxItem Content="连续重抽"/>
+                            <ComboBoxItem Content="学校连点"/>
                         </ComboBox>
                         <Label VerticalAlignment="Top"
                                 Margin="25,70,0,0"
