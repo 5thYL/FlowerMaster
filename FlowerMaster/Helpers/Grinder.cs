@@ -191,6 +191,68 @@ namespace FlowerMaster.Helpers
                 }
             }
 
+            //Repeated use of skip tickets
+            while (GrindTimes.Value() > 0 &&
+                   DataUtil.Config.sysConfig.autoType == 4)
+            {
+
+                MiscHelper.AddLog("Starting skip tickets script, please make sure if you are the resolution scene after using skip tickets", MiscHelper.LogType.GrindDebug);
+                while (Col.Check(1000, 585, 8, 158, 112) == false)
+                {
+                    MiscHelper.AddLog("Skip button not found, waiting until skip button shows up", MiscHelper.LogType.GrindDebug);
+                    Thread.Sleep(delay * 5);
+                }
+
+
+                while (Col.Check(980, 520, 238, 224, 202) == false)
+                {
+                    MiscHelper.AddLog("Waiting for skip confirmation popup while clicking the skip button", MiscHelper.LogType.GrindDebug);
+                    Cli.Click(1000, 585);
+                    Thread.Sleep(delay * 3);
+                }
+
+                while (Col.Check(766, 404, 52, 52, 52) == false)
+                {
+                    MiscHelper.AddLog("Maxing skip times", MiscHelper.LogType.GrindDebug);
+                    Cli.Click(766, 404);
+                    Thread.Sleep(delay);
+                }
+
+                MiscHelper.AddLog("Clicking skip button", MiscHelper.LogType.GrindDebug);
+                Cli.Click(440, 490);
+                Thread.Sleep(delay);
+                MiscHelper.AddLog("Clicking to resolve the resolution faster", MiscHelper.LogType.GrindDebug);
+                Cli.Click(1000, 585);
+                Thread.Sleep(delay);
+
+                while (Col.Check(1000, 585, 8, 158, 112) == false && Col.Check(540, 310, 161, 57, 4) == false)
+                {
+                    MiscHelper.AddLog("Until low stam popup for the next round of skips happen, keep clicking where the skip button is supposed to be", MiscHelper.LogType.GrindDebug);
+                    Cli.Click(1000, 585);
+                    Thread.Sleep(delay);
+                    if (Col.Check(360, 250, 200, 37, 64) == true)
+                    {
+                        MiscHelper.AddLog("Stam low popup, refilling stam", MiscHelper.LogType.GrindDebug);
+                        ScRefill();
+                        while (Col.Check(440, 490, 54, 50, 38) == false)
+                        {
+                            MiscHelper.AddLog("Wait until skip button appears after refilling stam", MiscHelper.LogType.GrindDebug);
+                            Thread.Sleep(delay);
+                        }
+                        MiscHelper.AddLog("Clicking skip button", MiscHelper.LogType.GrindDebug);
+                        Cli.Click(440, 490);
+                    }
+                }
+
+                if (Col.Check(540, 310, 161, 57, 4) == true)
+                {
+                    MiscHelper.AddLog("Misclicked into another skip popup, exiting", MiscHelper.LogType.GrindDebug);
+                    Cli.Click(720, 480);
+                }
+
+                GrindTimes.Decrease();
+
+            }
 
             return;
         }
@@ -397,16 +459,35 @@ namespace FlowerMaster.Helpers
             if (DataUtil.Config.sysConfig.potionTrue == true)
             {
                 //确认是否有药水喝
-                if (Col.Check(300, 400, 128, 128, 128) == false)
+                if (Col.Check(320, 400, 200, 97, 85) == true)
                 {
-                    Cli.Click(300, 400);
+                    Cli.Click(350, 400);
 
-                    WaConfirmWindow();
+                    WaStamConfirm();
                     //确定喝药红字出现
-                    if (Col.Check(341, 323, 255, 1, 1) == true)
+                    MiscHelper.AddLog("Click drink potion button", MiscHelper.LogType.GrindDebug);
+                    if (Col.Check(430, 480, 206, 102, 87) == true)
                     {
-                        Cli.Click(410, 400);
-                        CoPrevent();
+                        while (Col.Check(766, 377, 143, 143, 143) == false)
+                        {
+                            MiscHelper.AddLog("Max number of potions drank", MiscHelper.LogType.GrindDebug);
+                            //Make sure to make this a toggle down the line
+                            Cli.Click(766, 377);
+                            Thread.Sleep(delay);
+                        }
+
+                        MiscHelper.AddLog("Drink Potion", MiscHelper.LogType.GrindDebug);
+                        Cli.Click(430, 480);
+
+                        while (Col.Check(980, 150, 5, 89, 87) == false)
+                        {
+                            MiscHelper.AddLog("Wait for confirmation popup", MiscHelper.LogType.GrindDebug);
+                            //Make sure to make this a toggle down the line
+                            Thread.Sleep(delay);
+                        }
+
+                        MiscHelper.AddLog("Click confirmation popup", MiscHelper.LogType.GrindDebug);
+                        Cli.Click(980, 150);
                         return true;
                     }
                 }
@@ -418,6 +499,7 @@ namespace FlowerMaster.Helpers
             }
 
             //碎石头
+            /*
             if (DataUtil.Config.sysConfig.stoneTrue == true)
             {
                 while (Col.Check(410, 460, 176, 113, 91) == false)
@@ -440,6 +522,7 @@ namespace FlowerMaster.Helpers
                     return false;
                 }
             }
+            */
 
             return false;
         }
@@ -1313,9 +1396,10 @@ namespace FlowerMaster.Helpers
         /// <summary>
         /// 等待体力恢复确认框出现
         /// </summary>
-        private void WaConfirmWindow()
+        private void WaStamConfirm()
         {
-            while (Col.Check(410, 400, 187, 90, 76) == false) { Thread.Sleep(delay); }
+            MiscHelper.AddLog("Wait until stam confirmation popup show up", MiscHelper.LogType.GrindDebug);
+            while (Col.Check(430, 480, 206, 102, 87) == false) { Thread.Sleep(delay); }
         }
 
     }

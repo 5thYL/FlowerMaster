@@ -919,6 +919,7 @@
                             <ComboBoxItem Content="主页待机 - 别用"/>
                             <ComboBoxItem Content="连续重抽"/>
                             <ComboBoxItem Content="学校连点"/>
+                            <ComboBoxItem Content="重复跳过票"/>
                         </ComboBox>
                         <Label VerticalAlignment="Top"
                                 Margin="25,70,0,0"

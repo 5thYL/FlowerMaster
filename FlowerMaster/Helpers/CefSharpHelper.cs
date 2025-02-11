@@ -64,6 +64,7 @@ namespace FlowerMaster.Helpers
             cefSettings.CefCommandLineArgs.Add("in-process-gpu", "1");
             cefSettings.CefCommandLineArgs.Add("enable-gpu", "1");
             cefSettings.CefCommandLineArgs.Add("enable-begin-frame-scheduling", "1");
+            cefSettings.LogSeverity = LogSeverity.Disable;
 
             Cef.EnableHighDPISupport();
             Cef.Initialize(cefSettings);
