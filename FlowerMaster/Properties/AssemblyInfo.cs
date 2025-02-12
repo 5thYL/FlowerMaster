@@ -5,8 +5,8 @@ using System.Windows;
 // 有关程序集的一般信息由以下
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("團長助理")]
-[assembly: AssemblyDescription("美少女花騎士專用瀏覽器 OC版")]
+[assembly: AssemblyTitle("团长助理")]
+[assembly: AssemblyDescription("美少女花骑士专用浏览器")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("dghkd")]
 [assembly: AssemblyProduct("FlowerMaster Offshoot Creation")]
