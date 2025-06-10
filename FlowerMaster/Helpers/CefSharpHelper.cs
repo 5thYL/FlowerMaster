@@ -66,7 +66,6 @@ namespace FlowerMaster.Helpers
             cefSettings.CefCommandLineArgs.Add("enable-begin-frame-scheduling", "1");
             cefSettings.LogSeverity = LogSeverity.Disable;
 
-            Cef.EnableHighDPISupport();
             Cef.Initialize(cefSettings);
         }
 
@@ -85,14 +84,14 @@ namespace FlowerMaster.Helpers
         public static bool TakeoutGameFrame(ChromiumWebBrowser webBrowser)
         {
             var browser = webBrowser.GetBrowser();
-            var gameFrame = browser.GetFrame("game_frame");
+            var gameFrame = browser.GetFrameByName("game_frame");
             if (gameFrame == null)
             {
                 return false;
             }
 
             IFrame frame = browser.GetFrameIdentifiers()
-                .Select(x => browser.GetFrame(x))
+                .Select(x => browser.GetFrameByIdentifier(x))
                 .FirstOrDefault(x => x.Url.Contains("/flower"));  //TODO: 依使用者選擇的伺服器URL做Contains
             if (frame != null)
             {
